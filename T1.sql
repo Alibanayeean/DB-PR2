@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION T4_function()
+CREATE OR REPLACE FUNCTION T1_function()
 RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.cost > (select sum(balacne) from citizen_acc where NEW.driver = citizen_acc.ssn)	Then
@@ -10,7 +10,7 @@ BEGIN
 										   from personal_car as pc
 										   where pc.cid = NEW.car
 									   )
-									   ORDER BY ID LIMIT 1);
+									   ORDER BY acc_no LIMIT 1);
 		UPDATE citizen_acc as ca
     	SET ca.balance = 0
     	WHERE NEW.driver = ca.ssn;
@@ -20,9 +20,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-create or REPLACE trigger T4
+create or REPLACE trigger T1
 	After insert on parking_receipt
 	for each row 
-	EXECUTE FUNCTION T4_function();
+	EXECUTE FUNCTION T1_function();
 
 	
